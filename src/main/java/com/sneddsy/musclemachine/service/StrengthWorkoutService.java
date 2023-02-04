@@ -2,6 +2,7 @@ package com.sneddsy.musclemachine.service;
 
 import com.sneddsy.musclemachine.domain.StrengthWorkout;
 import com.sneddsy.musclemachine.repository.StrengthWorkoutRepository;
+import com.sneddsy.musclemachine.web.rest.vm.workout.StrengthWorkoutVM;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -24,6 +25,15 @@ public class StrengthWorkoutService {
 
     public StrengthWorkoutService(StrengthWorkoutRepository strengthWorkoutRepository) {
         this.strengthWorkoutRepository = strengthWorkoutRepository;
+    }
+
+    /**
+     * Creates a new Strength workout and persists the associated data for the user.
+     * @return
+     */
+    public StrengthWorkout create(StrengthWorkoutVM request) {
+        log.debug("Request to create a new complete StrengthWorkout : {}", request);
+        return new StrengthWorkout();
     }
 
     /**

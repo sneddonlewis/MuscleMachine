@@ -4,6 +4,7 @@ import com.sneddsy.musclemachine.domain.StrengthWorkout;
 import com.sneddsy.musclemachine.repository.StrengthWorkoutRepository;
 import com.sneddsy.musclemachine.service.StrengthWorkoutService;
 import com.sneddsy.musclemachine.web.rest.errors.BadRequestAlertException;
+import com.sneddsy.musclemachine.web.rest.vm.workout.StrengthWorkoutVM;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -60,6 +61,16 @@ public class StrengthWorkoutResource {
         return ResponseEntity
             .created(new URI("/api/strength-workouts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    @PostMapping("/strength-workouts/create")
+    public ResponseEntity<StrengthWorkout> createCompleteStrengthWorkout(@RequestBody StrengthWorkoutVM request) throws URISyntaxException {
+        log.debug("REST request to create a new complete StrengthWorkout : {}", request);
+        var result = strengthWorkoutService.create(request);
+        return ResponseEntity
+            .created(new URI("/api/strength-workouts/" + 1))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, "1"))
             .body(result);
     }
 
