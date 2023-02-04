@@ -1,0 +1,36 @@
+{
+  "applications": "*",
+  "changelogDate": "20230204111503",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "resistance",
+  "fields": [
+    {
+      "fieldName": "band",
+      "fieldType": "Float"
+    },
+    {
+      "fieldName": "cable",
+      "fieldType": "Float"
+    },
+    {
+      "fieldName": "freeWeight",
+      "fieldType": "Float"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Resistance",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "trainingSet",
+      "otherEntityRelationshipName": "resistance",
+      "ownerSide": false,
+      "relationshipName": "trainingSet",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "service": "no"
+}

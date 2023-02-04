@@ -1,0 +1,43 @@
+{
+  "applications": "*",
+  "changelogDate": "20230204111502",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "training_set",
+  "fields": [
+    {
+      "fieldName": "setNumber",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "repetitions",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "timeUnderLoad",
+      "fieldType": "Integer"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "TrainingSet",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "resistance",
+      "otherEntityRelationshipName": "trainingSet",
+      "ownerSide": true,
+      "relationshipName": "resistance",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "strengthWorkout",
+      "otherEntityRelationshipName": "trainingSet",
+      "relationshipName": "strengthWorkout",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
+}
