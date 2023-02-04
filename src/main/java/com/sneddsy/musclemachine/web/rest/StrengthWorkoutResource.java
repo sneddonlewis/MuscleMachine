@@ -4,6 +4,7 @@ import com.sneddsy.musclemachine.domain.StrengthWorkout;
 import com.sneddsy.musclemachine.repository.StrengthWorkoutRepository;
 import com.sneddsy.musclemachine.service.StrengthWorkoutService;
 import com.sneddsy.musclemachine.web.rest.errors.BadRequestAlertException;
+import com.sneddsy.musclemachine.web.rest.vm.workout.StrengthWorkoutVM;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -60,6 +61,23 @@ public class StrengthWorkoutResource {
         return ResponseEntity
             .created(new URI("/api/strength-workouts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    /**
+     * {@code POST  /strength-workouts} : Create a new strengthWorkout. This endpoint will replace createStrengthWorkout.
+     *
+     * @param request the strengthWorkout to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new strengthWorkout, or with status {@code 400 (Bad Request)} if the strengthWorkout has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/strength-workouts/create")
+    public ResponseEntity<StrengthWorkout> createCompleteStrengthWorkout(@RequestBody StrengthWorkoutVM request) throws URISyntaxException {
+        log.debug("REST request to save StrengthWorkout : {}", request);
+        StrengthWorkout result = new StrengthWorkout();
+        return ResponseEntity
+            .created(new URI("/api/strength-workouts/" + 1L))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, "1"))
             .body(result);
     }
 
