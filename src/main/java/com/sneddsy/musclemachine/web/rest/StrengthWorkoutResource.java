@@ -225,8 +225,14 @@ public class StrengthWorkoutResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/strength-workouts/{id}")
+    @Transactional
     public ResponseEntity<Void> deleteStrengthWorkout(@PathVariable Long id) {
         log.debug("REST request to delete StrengthWorkout : {}", id);
+        var workout = strengthWorkoutService.findOne(id);
+        if (workout.isEmpty()) {
+            throw new BadRequestAlertException("Workout not found", ENTITY_NAME, "not-found");
+        }
+        workout.get().getWorkSets().stream().map(WorkSet::getId).forEach(workSetRepository::deleteById);
         strengthWorkoutService.delete(id);
         return ResponseEntity
             .noContent()
