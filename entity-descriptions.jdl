@@ -20,8 +20,21 @@ entity TrainingSet {
     timeUnderLoad Integer
 }
 
+entity WorkSet {
+    setNumber Integer required
+    repetitions Integer
+    timeUnderLoad Integer
+    bandResistance Float
+    cableResistance Float
+    freeWeightResistance Float
+}
+
 relationship ManyToOne {
     TrainingSet to StrengthWorkout
+}
+
+relationship ManyToOne {
+    WorkSet to StrengthWorkout
 }
 
 entity Resistance {
