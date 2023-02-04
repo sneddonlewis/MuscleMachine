@@ -1,0 +1,38 @@
+entity StrengthWorkout {
+    time ZonedDateTime required
+}
+
+relationship ManyToOne {
+    StrengthWorkout{user(login)} to User
+}
+
+relationship OneToOne {
+    StrengthWorkout to Exercise
+}
+
+entity Exercise {
+    name String required
+}
+
+entity TrainingSet {
+    setNumber Integer required
+    repetitions Integer
+    timeUnderLoad Integer
+}
+
+relationship ManyToOne {
+    TrainingSet to StrengthWorkout
+}
+
+entity Resistance {
+    band Float
+    cable Float
+    freeWeight Float
+}
+
+relationship OneToOne {
+    TrainingSet to Resistance
+}
+
+service StrengthWorkout with serviceClass
+
