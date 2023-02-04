@@ -28,15 +28,6 @@ public class StrengthWorkoutService {
     }
 
     /**
-     * Creates a new Strength workout and persists the associated data for the user.
-     * @return
-     */
-    public StrengthWorkout create(StrengthWorkoutVM request) {
-        log.debug("Request to create a new complete StrengthWorkout : {}", request);
-        return new StrengthWorkout();
-    }
-
-    /**
      * Save a strengthWorkout.
      *
      * @param strengthWorkout the entity to save.

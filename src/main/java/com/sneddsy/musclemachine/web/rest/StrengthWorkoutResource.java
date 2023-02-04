@@ -1,8 +1,12 @@
 package com.sneddsy.musclemachine.web.rest;
 
+import com.sneddsy.musclemachine.domain.Exercise;
 import com.sneddsy.musclemachine.domain.StrengthWorkout;
+import com.sneddsy.musclemachine.repository.ExerciseRepository;
 import com.sneddsy.musclemachine.repository.StrengthWorkoutRepository;
+import com.sneddsy.musclemachine.security.SecurityUtils;
 import com.sneddsy.musclemachine.service.StrengthWorkoutService;
+import com.sneddsy.musclemachine.service.UserService;
 import com.sneddsy.musclemachine.web.rest.errors.BadRequestAlertException;
 import com.sneddsy.musclemachine.web.rest.vm.workout.StrengthWorkoutVM;
 import java.net.URI;
@@ -16,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -37,10 +42,19 @@ public class StrengthWorkoutResource {
     private final StrengthWorkoutService strengthWorkoutService;
 
     private final StrengthWorkoutRepository strengthWorkoutRepository;
+    private final ExerciseRepository exerciseRepository;
+    private final UserService userService;
 
-    public StrengthWorkoutResource(StrengthWorkoutService strengthWorkoutService, StrengthWorkoutRepository strengthWorkoutRepository) {
+    public StrengthWorkoutResource(
+        StrengthWorkoutService strengthWorkoutService,
+        StrengthWorkoutRepository strengthWorkoutRepository,
+        ExerciseRepository exerciseRepository,
+        UserService userService
+    ) {
         this.strengthWorkoutService = strengthWorkoutService;
         this.strengthWorkoutRepository = strengthWorkoutRepository;
+        this.exerciseRepository = exerciseRepository;
+        this.userService = userService;
     }
 
     /**
@@ -67,7 +81,22 @@ public class StrengthWorkoutResource {
     @PostMapping("/strength-workouts/create")
     public ResponseEntity<StrengthWorkout> createCompleteStrengthWorkout(@RequestBody StrengthWorkoutVM request) throws URISyntaxException {
         log.debug("REST request to create a new complete StrengthWorkout : {}", request);
-        var result = strengthWorkoutService.create(request);
+        // StrengthWorkout from request
+        // add the current user
+        var user = userService.getUserWithAuthorities();
+        if (user.isEmpty()) {
+            throw new BadCredentialsException("Not logged in");
+        }
+        // check if the exercise exists and add that
+        Optional<Exercise> exercise = exerciseRepository.findById(request.getExerciseId());
+        if (exercise.isEmpty()) {
+            throw new BadRequestAlertException("Not a valid exercise", ENTITY_NAME, "invalid-exercise");
+        }
+        // add each resistance
+        // add each training set
+        // save the entity
+        var result = new StrengthWorkout().exercise(exercise.get()).user(user.get());
+        log.debug("Creating StrengthWorkout currently in state: {}", result);
         return ResponseEntity
             .created(new URI("/api/strength-workouts/" + 1))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, "1"))

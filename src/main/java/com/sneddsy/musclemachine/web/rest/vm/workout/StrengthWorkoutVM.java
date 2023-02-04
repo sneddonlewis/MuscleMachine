@@ -22,6 +22,14 @@ public class StrengthWorkoutVM {
         this.trainingSets = trainingSets;
     }
 
+    public Long getExerciseId() {
+        return exerciseId;
+    }
+
+    public void setExerciseId(Long exerciseId) {
+        this.exerciseId = exerciseId;
+    }
+
     public ZonedDateTime getTime() {
         return time;
     }
