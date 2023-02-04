@@ -12,11 +12,11 @@ public class StrengthWorkoutVM {
     private ZonedDateTime time;
 
     @JsonProperty("training-sets")
-    private List<TrainingSetVM> trainingSets;
+    private List<WorkSetVM> trainingSets;
 
     public StrengthWorkoutVM() {}
 
-    public StrengthWorkoutVM(Long exerciseId, ZonedDateTime time, List<TrainingSetVM> trainingSets) {
+    public StrengthWorkoutVM(Long exerciseId, ZonedDateTime time, List<WorkSetVM> trainingSets) {
         this.exerciseId = exerciseId;
         this.time = time;
         this.trainingSets = trainingSets;
@@ -38,11 +38,11 @@ public class StrengthWorkoutVM {
         this.time = time;
     }
 
-    public List<TrainingSetVM> getTrainingSets() {
+    public List<WorkSetVM> getTrainingSets() {
         return trainingSets;
     }
 
-    public void setTrainingSets(List<TrainingSetVM> trainingSets) {
+    public void setTrainingSets(List<WorkSetVM> trainingSets) {
         this.trainingSets = trainingSets;
     }
 

@@ -7,6 +7,7 @@ import StrengthWorkout from './strength-workout';
 import Exercise from './exercise';
 import TrainingSet from './training-set';
 import Resistance from './resistance';
+import WorkSet from './work-set';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 export default () => {
@@ -18,6 +19,7 @@ export default () => {
         <Route path="exercise/*" element={<Exercise />} />
         <Route path="training-set/*" element={<TrainingSet />} />
         <Route path="resistance/*" element={<Resistance />} />
+        <Route path="work-set/*" element={<WorkSet />} />
         {/* jhipster-needle-add-route-path - JHipster will add routes here */}
       </ErrorBoundaryRoutes>
     </div>

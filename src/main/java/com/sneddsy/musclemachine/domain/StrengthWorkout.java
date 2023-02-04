@@ -44,6 +44,11 @@ public class StrengthWorkout implements Serializable {
     @JsonIgnoreProperties(value = { "resistance", "strengthWorkout" }, allowSetters = true)
     private Set<TrainingSet> trainingSets = new HashSet<>();
 
+    @OneToMany(mappedBy = "strengthWorkout")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "strengthWorkout" }, allowSetters = true)
+    private Set<WorkSet> workSets = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -126,6 +131,37 @@ public class StrengthWorkout implements Serializable {
     public StrengthWorkout removeTrainingSet(TrainingSet trainingSet) {
         this.trainingSets.remove(trainingSet);
         trainingSet.setStrengthWorkout(null);
+        return this;
+    }
+
+    public Set<WorkSet> getWorkSets() {
+        return this.workSets;
+    }
+
+    public void setWorkSets(Set<WorkSet> workSets) {
+        if (this.workSets != null) {
+            this.workSets.forEach(i -> i.setStrengthWorkout(null));
+        }
+        if (workSets != null) {
+            workSets.forEach(i -> i.setStrengthWorkout(this));
+        }
+        this.workSets = workSets;
+    }
+
+    public StrengthWorkout workSets(Set<WorkSet> workSets) {
+        this.setWorkSets(workSets);
+        return this;
+    }
+
+    public StrengthWorkout addWorkSet(WorkSet workSet) {
+        this.workSets.add(workSet);
+        workSet.setStrengthWorkout(this);
+        return this;
+    }
+
+    public StrengthWorkout removeWorkSet(WorkSet workSet) {
+        this.workSets.remove(workSet);
+        workSet.setStrengthWorkout(null);
         return this;
     }
 

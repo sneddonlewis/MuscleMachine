@@ -28,7 +28,7 @@ public class Exercise implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @JsonIgnoreProperties(value = { "exercise", "user", "trainingSets" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "exercise", "user", "trainingSets", "workSets" }, allowSetters = true)
     @OneToOne(mappedBy = "exercise")
     private StrengthWorkout strengthWorkout;
 

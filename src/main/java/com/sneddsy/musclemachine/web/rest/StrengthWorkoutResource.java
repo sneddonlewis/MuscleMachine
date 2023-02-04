@@ -1,15 +1,9 @@
 package com.sneddsy.musclemachine.web.rest;
 
-import com.sneddsy.musclemachine.domain.Exercise;
 import com.sneddsy.musclemachine.domain.StrengthWorkout;
-import com.sneddsy.musclemachine.repository.ExerciseRepository;
-import com.sneddsy.musclemachine.repository.ResistanceRepository;
 import com.sneddsy.musclemachine.repository.StrengthWorkoutRepository;
-import com.sneddsy.musclemachine.repository.TrainingSetRepository;
 import com.sneddsy.musclemachine.service.StrengthWorkoutService;
-import com.sneddsy.musclemachine.service.UserService;
 import com.sneddsy.musclemachine.web.rest.errors.BadRequestAlertException;
-import com.sneddsy.musclemachine.web.rest.vm.workout.StrengthWorkoutVM;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -21,8 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -44,25 +36,10 @@ public class StrengthWorkoutResource {
     private final StrengthWorkoutService strengthWorkoutService;
 
     private final StrengthWorkoutRepository strengthWorkoutRepository;
-    private final ExerciseRepository exerciseRepository;
-    private final ResistanceRepository resistanceRepository;
-    private final TrainingSetRepository trainingSetRepository;
-    private final UserService userService;
 
-    public StrengthWorkoutResource(
-        StrengthWorkoutService strengthWorkoutService,
-        StrengthWorkoutRepository strengthWorkoutRepository,
-        ExerciseRepository exerciseRepository,
-        ResistanceRepository resistanceRepository,
-        TrainingSetRepository trainingSetRepository,
-        UserService userService
-    ) {
+    public StrengthWorkoutResource(StrengthWorkoutService strengthWorkoutService, StrengthWorkoutRepository strengthWorkoutRepository) {
         this.strengthWorkoutService = strengthWorkoutService;
         this.strengthWorkoutRepository = strengthWorkoutRepository;
-        this.exerciseRepository = exerciseRepository;
-        this.resistanceRepository = resistanceRepository;
-        this.trainingSetRepository = trainingSetRepository;
-        this.userService = userService;
     }
 
     /**
@@ -83,35 +60,6 @@ public class StrengthWorkoutResource {
         return ResponseEntity
             .created(new URI("/api/strength-workouts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-            .body(result);
-    }
-
-    @PostMapping("/strength-workouts/create")
-    @Transactional
-    public ResponseEntity<StrengthWorkout> createCompleteStrengthWorkout(@RequestBody StrengthWorkoutVM request) throws URISyntaxException {
-        log.debug("REST request to create a new complete StrengthWorkout : {}", request);
-        // StrengthWorkout from request
-        // add the current user
-        var user = userService.getUserWithAuthorities();
-        if (user.isEmpty()) {
-            throw new BadCredentialsException("Not logged in");
-        }
-        // check if the exercise exists and add that
-        Optional<Exercise> exercise = exerciseRepository.findById(request.getExerciseId());
-        if (exercise.isEmpty()) {
-            throw new BadRequestAlertException("Not a valid exercise", ENTITY_NAME, "invalid-exercise");
-        }
-        // add each resistance
-        // add each training set
-        // for each trainingSetVM in request.trainingSets
-        // create and save the resistance
-        // create and save the training set with the resistance
-        // save the entity
-        var result = new StrengthWorkout().exercise(exercise.get()).user(user.get());
-        log.debug("Creating StrengthWorkout currently in state: {}", result);
-        return ResponseEntity
-            .created(new URI("/api/strength-workouts/" + 1))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, "1"))
             .body(result);
     }
 

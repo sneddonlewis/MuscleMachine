@@ -2,7 +2,6 @@ package com.sneddsy.musclemachine.service;
 
 import com.sneddsy.musclemachine.domain.StrengthWorkout;
 import com.sneddsy.musclemachine.repository.StrengthWorkoutRepository;
-import com.sneddsy.musclemachine.web.rest.vm.workout.StrengthWorkoutVM;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;

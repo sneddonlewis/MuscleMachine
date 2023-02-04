@@ -35,6 +35,12 @@
       "otherEntityRelationshipName": "strengthWorkout",
       "relationshipName": "trainingSet",
       "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "workSet",
+      "otherEntityRelationshipName": "strengthWorkout",
+      "relationshipName": "workSet",
+      "relationshipType": "one-to-many"
     }
   ],
   "service": "serviceClass"

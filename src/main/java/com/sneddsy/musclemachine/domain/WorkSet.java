@@ -8,13 +8,13 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * A TrainingSet.
+ * A WorkSet.
  */
 @Entity
-@Table(name = "training_set")
+@Table(name = "work_set")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class TrainingSet implements Serializable {
+public class WorkSet implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,10 +34,14 @@ public class TrainingSet implements Serializable {
     @Column(name = "time_under_load")
     private Integer timeUnderLoad;
 
-    @JsonIgnoreProperties(value = { "trainingSet" }, allowSetters = true)
-    @OneToOne
-    @JoinColumn(unique = true)
-    private Resistance resistance;
+    @Column(name = "band_resistance")
+    private Float bandResistance;
+
+    @Column(name = "cable_resistance")
+    private Float cableResistance;
+
+    @Column(name = "free_weight_resistance")
+    private Float freeWeightResistance;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "exercise", "user", "trainingSets", "workSets" }, allowSetters = true)
@@ -49,7 +53,7 @@ public class TrainingSet implements Serializable {
         return this.id;
     }
 
-    public TrainingSet id(Long id) {
+    public WorkSet id(Long id) {
         this.setId(id);
         return this;
     }
@@ -62,7 +66,7 @@ public class TrainingSet implements Serializable {
         return this.setNumber;
     }
 
-    public TrainingSet setNumber(Integer setNumber) {
+    public WorkSet setNumber(Integer setNumber) {
         this.setSetNumber(setNumber);
         return this;
     }
@@ -75,7 +79,7 @@ public class TrainingSet implements Serializable {
         return this.repetitions;
     }
 
-    public TrainingSet repetitions(Integer repetitions) {
+    public WorkSet repetitions(Integer repetitions) {
         this.setRepetitions(repetitions);
         return this;
     }
@@ -88,7 +92,7 @@ public class TrainingSet implements Serializable {
         return this.timeUnderLoad;
     }
 
-    public TrainingSet timeUnderLoad(Integer timeUnderLoad) {
+    public WorkSet timeUnderLoad(Integer timeUnderLoad) {
         this.setTimeUnderLoad(timeUnderLoad);
         return this;
     }
@@ -97,17 +101,43 @@ public class TrainingSet implements Serializable {
         this.timeUnderLoad = timeUnderLoad;
     }
 
-    public Resistance getResistance() {
-        return this.resistance;
+    public Float getBandResistance() {
+        return this.bandResistance;
     }
 
-    public void setResistance(Resistance resistance) {
-        this.resistance = resistance;
-    }
-
-    public TrainingSet resistance(Resistance resistance) {
-        this.setResistance(resistance);
+    public WorkSet bandResistance(Float bandResistance) {
+        this.setBandResistance(bandResistance);
         return this;
+    }
+
+    public void setBandResistance(Float bandResistance) {
+        this.bandResistance = bandResistance;
+    }
+
+    public Float getCableResistance() {
+        return this.cableResistance;
+    }
+
+    public WorkSet cableResistance(Float cableResistance) {
+        this.setCableResistance(cableResistance);
+        return this;
+    }
+
+    public void setCableResistance(Float cableResistance) {
+        this.cableResistance = cableResistance;
+    }
+
+    public Float getFreeWeightResistance() {
+        return this.freeWeightResistance;
+    }
+
+    public WorkSet freeWeightResistance(Float freeWeightResistance) {
+        this.setFreeWeightResistance(freeWeightResistance);
+        return this;
+    }
+
+    public void setFreeWeightResistance(Float freeWeightResistance) {
+        this.freeWeightResistance = freeWeightResistance;
     }
 
     public StrengthWorkout getStrengthWorkout() {
@@ -118,7 +148,7 @@ public class TrainingSet implements Serializable {
         this.strengthWorkout = strengthWorkout;
     }
 
-    public TrainingSet strengthWorkout(StrengthWorkout strengthWorkout) {
+    public WorkSet strengthWorkout(StrengthWorkout strengthWorkout) {
         this.setStrengthWorkout(strengthWorkout);
         return this;
     }
@@ -130,10 +160,10 @@ public class TrainingSet implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof TrainingSet)) {
+        if (!(o instanceof WorkSet)) {
             return false;
         }
-        return id != null && id.equals(((TrainingSet) o).id);
+        return id != null && id.equals(((WorkSet) o).id);
     }
 
     @Override
@@ -145,11 +175,14 @@ public class TrainingSet implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "TrainingSet{" +
+        return "WorkSet{" +
             "id=" + getId() +
             ", setNumber=" + getSetNumber() +
             ", repetitions=" + getRepetitions() +
             ", timeUnderLoad=" + getTimeUnderLoad() +
+            ", bandResistance=" + getBandResistance() +
+            ", cableResistance=" + getCableResistance() +
+            ", freeWeightResistance=" + getFreeWeightResistance() +
             "}";
     }
 }

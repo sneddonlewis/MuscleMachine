@@ -53,6 +53,8 @@ public class CacheConfiguration {
             createCache(cm, com.sneddsy.musclemachine.domain.Exercise.class.getName());
             createCache(cm, com.sneddsy.musclemachine.domain.TrainingSet.class.getName());
             createCache(cm, com.sneddsy.musclemachine.domain.Resistance.class.getName());
+            createCache(cm, com.sneddsy.musclemachine.domain.StrengthWorkout.class.getName() + ".workSets");
+            createCache(cm, com.sneddsy.musclemachine.domain.WorkSet.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

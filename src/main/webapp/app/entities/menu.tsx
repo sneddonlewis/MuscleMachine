@@ -18,6 +18,9 @@ const EntitiesMenu = () => {
       <MenuItem icon="asterisk" to="/resistance">
         Resistance
       </MenuItem>
+      <MenuItem icon="asterisk" to="/work-set">
+        Work Set
+      </MenuItem>
       {/* jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here */}
     </>
   );
