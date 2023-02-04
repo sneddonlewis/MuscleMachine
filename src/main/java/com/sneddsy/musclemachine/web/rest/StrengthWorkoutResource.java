@@ -1,9 +1,12 @@
 package com.sneddsy.musclemachine.web.rest;
 
 import com.sneddsy.musclemachine.domain.StrengthWorkout;
+import com.sneddsy.musclemachine.domain.WorkSet;
 import com.sneddsy.musclemachine.repository.ExerciseRepository;
 import com.sneddsy.musclemachine.repository.StrengthWorkoutRepository;
+import com.sneddsy.musclemachine.repository.WorkSetRepository;
 import com.sneddsy.musclemachine.service.StrengthWorkoutService;
+import com.sneddsy.musclemachine.service.UserService;
 import com.sneddsy.musclemachine.web.rest.errors.BadRequestAlertException;
 import com.sneddsy.musclemachine.web.rest.vm.workout.StrengthWorkoutVM;
 import java.net.URI;
@@ -17,6 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -39,15 +44,21 @@ public class StrengthWorkoutResource {
 
     private final StrengthWorkoutRepository strengthWorkoutRepository;
     private final ExerciseRepository exerciseRepository;
+    private final UserService userService;
+    private final WorkSetRepository workSetRepository;
 
     public StrengthWorkoutResource(
         StrengthWorkoutService strengthWorkoutService,
         StrengthWorkoutRepository strengthWorkoutRepository,
-        ExerciseRepository exerciseRepository
+        ExerciseRepository exerciseRepository,
+        UserService userService,
+        WorkSetRepository workSetRepository
     ) {
         this.strengthWorkoutService = strengthWorkoutService;
         this.strengthWorkoutRepository = strengthWorkoutRepository;
         this.exerciseRepository = exerciseRepository;
+        this.userService = userService;
+        this.workSetRepository = workSetRepository;
     }
 
     /**
@@ -79,18 +90,36 @@ public class StrengthWorkoutResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/strength-workouts/create")
+    @Transactional
     public ResponseEntity<StrengthWorkout> createCompleteStrengthWorkout(@RequestBody StrengthWorkoutVM request) throws URISyntaxException {
         log.debug("REST request to save StrengthWorkout : {}", request);
-        // get exercise
         var exercise = exerciseRepository.findById(request.getExerciseId());
         if (exercise.isEmpty()) {
             throw new BadRequestAlertException("The requested Exercise does not exist", ENTITY_NAME, "exercise-not-found");
         }
-        // get current user
-        StrengthWorkout result = new StrengthWorkout().exercise(exercise.get());
+        var user = userService.getUserWithAuthorities();
+        if (user.isEmpty()) {
+            throw new BadCredentialsException("Not authorised");
+        }
+
+        StrengthWorkout workout = new StrengthWorkout().exercise(exercise.get()).user(user.get());
+
+        for (var workSet : request.getTrainingSets()) {
+            WorkSet persistedSet = workSetRepository.save(
+                new WorkSet()
+                    .setNumber(workSet.getSetNumber())
+                    .repetitions(workSet.getRepetitions())
+                    .timeUnderLoad(workSet.getTimeUnderLoad())
+                    .bandResistance(workSet.getBand())
+                    .cableResistance(workSet.getCable())
+                    .freeWeightResistance(workSet.getFreeWeight())
+            );
+            workout.addWorkSet(persistedSet);
+        }
+        StrengthWorkout result = strengthWorkoutRepository.save(workout);
         return ResponseEntity
-            .created(new URI("/api/strength-workouts/" + 1L))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, "1"))
+            .created(new URI("/api/strength-workouts/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
