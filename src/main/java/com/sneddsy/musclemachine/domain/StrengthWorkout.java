@@ -41,11 +41,6 @@ public class StrengthWorkout implements Serializable {
 
     @OneToMany(mappedBy = "strengthWorkout")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "resistance", "strengthWorkout" }, allowSetters = true)
-    private Set<TrainingSet> trainingSets = new HashSet<>();
-
-    @OneToMany(mappedBy = "strengthWorkout")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "strengthWorkout" }, allowSetters = true)
     private Set<WorkSet> workSets = new HashSet<>();
 
@@ -100,37 +95,6 @@ public class StrengthWorkout implements Serializable {
 
     public StrengthWorkout user(User user) {
         this.setUser(user);
-        return this;
-    }
-
-    public Set<TrainingSet> getTrainingSets() {
-        return this.trainingSets;
-    }
-
-    public void setTrainingSets(Set<TrainingSet> trainingSets) {
-        if (this.trainingSets != null) {
-            this.trainingSets.forEach(i -> i.setStrengthWorkout(null));
-        }
-        if (trainingSets != null) {
-            trainingSets.forEach(i -> i.setStrengthWorkout(this));
-        }
-        this.trainingSets = trainingSets;
-    }
-
-    public StrengthWorkout trainingSets(Set<TrainingSet> trainingSets) {
-        this.setTrainingSets(trainingSets);
-        return this;
-    }
-
-    public StrengthWorkout addTrainingSet(TrainingSet trainingSet) {
-        this.trainingSets.add(trainingSet);
-        trainingSet.setStrengthWorkout(this);
-        return this;
-    }
-
-    public StrengthWorkout removeTrainingSet(TrainingSet trainingSet) {
-        this.trainingSets.remove(trainingSet);
-        trainingSet.setStrengthWorkout(null);
         return this;
     }
 

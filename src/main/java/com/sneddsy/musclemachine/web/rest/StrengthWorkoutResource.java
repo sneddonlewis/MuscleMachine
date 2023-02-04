@@ -102,7 +102,7 @@ public class StrengthWorkoutResource {
             throw new BadCredentialsException("Not authorised");
         }
 
-        StrengthWorkout workout = new StrengthWorkout().exercise(exercise.get()).user(user.get());
+        StrengthWorkout workout = new StrengthWorkout().exercise(exercise.get()).user(user.get()).time(request.getTime());
 
         for (var workSet : request.getTrainingSets()) {
             WorkSet persistedSet = workSetRepository.save(
