@@ -1,6 +1,7 @@
 package com.sneddsy.musclemachine.web.rest;
 
 import com.sneddsy.musclemachine.domain.StrengthWorkout;
+import com.sneddsy.musclemachine.repository.ExerciseRepository;
 import com.sneddsy.musclemachine.repository.StrengthWorkoutRepository;
 import com.sneddsy.musclemachine.service.StrengthWorkoutService;
 import com.sneddsy.musclemachine.web.rest.errors.BadRequestAlertException;
@@ -37,10 +38,16 @@ public class StrengthWorkoutResource {
     private final StrengthWorkoutService strengthWorkoutService;
 
     private final StrengthWorkoutRepository strengthWorkoutRepository;
+    private final ExerciseRepository exerciseRepository;
 
-    public StrengthWorkoutResource(StrengthWorkoutService strengthWorkoutService, StrengthWorkoutRepository strengthWorkoutRepository) {
+    public StrengthWorkoutResource(
+        StrengthWorkoutService strengthWorkoutService,
+        StrengthWorkoutRepository strengthWorkoutRepository,
+        ExerciseRepository exerciseRepository
+    ) {
         this.strengthWorkoutService = strengthWorkoutService;
         this.strengthWorkoutRepository = strengthWorkoutRepository;
+        this.exerciseRepository = exerciseRepository;
     }
 
     /**
@@ -74,7 +81,13 @@ public class StrengthWorkoutResource {
     @PostMapping("/strength-workouts/create")
     public ResponseEntity<StrengthWorkout> createCompleteStrengthWorkout(@RequestBody StrengthWorkoutVM request) throws URISyntaxException {
         log.debug("REST request to save StrengthWorkout : {}", request);
-        StrengthWorkout result = new StrengthWorkout();
+        // get exercise
+        var exercise = exerciseRepository.findById(request.getExerciseId());
+        if (exercise.isEmpty()) {
+            throw new BadRequestAlertException("The requested Exercise does not exist", ENTITY_NAME, "exercise-not-found");
+        }
+        // get current user
+        StrengthWorkout result = new StrengthWorkout().exercise(exercise.get());
         return ResponseEntity
             .created(new URI("/api/strength-workouts/" + 1L))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, "1"))
