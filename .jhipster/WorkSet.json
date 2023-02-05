@@ -1,0 +1,54 @@
+{
+  "applications": "*",
+  "changelogDate": "20230205120131",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "work_set",
+  "fields": [
+    {
+      "fieldName": "setNumber",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "repetitions",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "timeUnderLoad",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "bandResistance",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "cableResistance",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "freeWeightResistance",
+      "fieldType": "Double"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "WorkSet",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "exercise",
+      "ownerSide": true,
+      "relationshipName": "exercise",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "strengthWorkout",
+      "otherEntityRelationshipName": "workSets",
+      "relationshipName": "strengthWorkout",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
+}
