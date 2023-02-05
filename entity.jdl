@@ -1,0 +1,30 @@
+entity StrengthWorkout {
+    time ZonedDateTime required
+}
+
+entity WorkSet {
+    setNumber Integer required
+    repetitions Integer
+    timeUnderLoad Integer
+    bandResistance Double
+    cableResistance Double
+    freeWeightResistance Double
+}
+
+entity Exercise {
+    name String required
+}
+
+relationship ManyToOne {
+    StrengthWorkout{user(login)} to User{strengthWorkouts}
+}
+
+relationship OneToOne {
+    WorkSet{exercise} to Exercise
+}
+
+relationship OneToMany {
+    StrengthWorkout{workSets} to WorkSet{strengthWorkout}
+}
+
+service StrengthWorkout with serviceClass
